@@ -6,47 +6,49 @@ I summarized the process of modeling and interpreting this data in [this talk](P
 Blog post [here](https://jack-etheredge.github.io/predicting-patient-readmission/).
 
 
-## Models compared:
-
-Logistic regression
-
-Linear Support vector machine (SVM)
-
-SVM with radial basis function (RBF) kernel
-
-K-Nearest Neighbors (KNN)
-
-Decision Tree
-
-Boosted Trees
-
-Random Forest
-
-Gaussian Naive Bayes
-
-Bernoulli Naive Bayes
-
-
 ## Data cleaning:
 
-Replaced ID codes with their descriptions
+1. Replaced ID codes with their descriptions
 
-Removed expired patients (since this unfairly increased model performance, as they were never readmitted)
+2. Removed expired patients (since this unfairly increased model performance, as they were never readmitted)
 
-Removed repeated patients (since this violated independence between observations)
+3. Removed repeated patients (since this violated independence between observations)
 
-I turned reduced the three initial classes into a binary classification problem.
+4. Turned the multi-class problem into a binary classification problem.
+
+I turned reduced the three initial classes (Not readmitted, readmitted >30 day, readmitted <30 days) into a binary classification problem (Not readmitted <30 days, Readmitted <30 days). This decision was motivated largely by hospital cost incentives and is a more practically addressed problem at the level of patient health as well (you're much more likely to be able to avoid a <30 day readmission than a 30-90 day readmission). 90 day readmission is another common metric that is used in healthcare, so it's possible that's the range for the >30 day class, but I'm left to infer that, since as best as I could tell, this is not stated/clarified in the original paper.
 
 
 ## Dealing with class imbalance:
 
-Stratified test/train split
+1. Stratified test/train split
 
-SMOTE oversampling
+2. SMOTE oversampling
 
-Random undersampling
+3. Random undersampling
 
 Roughly 8 times as many patients in the dataset are not readmitted early, so test/train split was always performed stratified and I compared the performance of balanced class weights, SMOTE oversampling, and random undersampling with most of the models.
+
+
+## Models compared:
+
+1. Logistic regression
+
+2. Linear Support vector machine (SVM)
+
+3. SVM with radial basis function (RBF) kernel
+
+4. K-Nearest Neighbors (KNN)
+
+5. Decision Tree
+
+6. Boosted Trees
+
+7. Random Forest
+
+8. Gaussian Naive Bayes
+
+9. Bernoulli Naive Bayes
 
 
 ## Random forest:
