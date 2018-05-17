@@ -3,6 +3,8 @@ I used several supervised machine learning algorithms to predict early hospital 
 
 I summarized the process of modeling and interpreting this data in [this talk](Predicting%20patient%20readmission%20-%20JNE.pdf).
 
+Blog post [here](https://jack-etheredge.github.io/predicting-patient-readmission/).
+
 
 ## Models compared:
 
