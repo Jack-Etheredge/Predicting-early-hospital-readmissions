@@ -49,7 +49,7 @@ Roughly 8 times as many patients in the dataset are not readmitted early, so tes
 
 ## Random forest:
 
-After optimizing hyperparameters for the various models to maximize recall, random forest performed best. I retained the top 25 of 252 features (many dummy variables for categoricals) based on their feature importance and retained most of my predictive power. These 25 features were used in the Flask predictor app. I've included the pickled model utilizing the top 25 features in this repo: [UPDATEfilename.pkl](/UPDATEfilepath/UPDATEfilename.pkl).
+After optimizing hyperparameters for the various models to maximize recall, random forest performed best. I retained the top 25 of 252 features (many dummy variables for categoricals) based on their feature importance and retained most of my predictive power. These 25 features were used in the Flask predictor app. I've included the pickled model utilizing the top 25 features in this repo: [randomforest.pkl](/Predictor_site_diabetes_flask/randomforest.pkl).
 
 I inferred directionality of these features through their correlation to the dependent variable (early readmission) after setting early readmissions to 1 and not early readmissions to 0. These coefficients can be used to identify patients at risk of early readmission independent of using the model to predict them. This could be useful in the case of identifying the most important patients to target for phone calls and home health care interventions (both shown to decrease readmission rates in a study linked to in my talk).
 
