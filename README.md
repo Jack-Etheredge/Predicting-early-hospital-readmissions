@@ -1,7 +1,7 @@
 # Predicting early hospital readmissions
 I used several supervised machine learning algorithms to predict early hospital readmissions based on a dataset available from UCI and performed a cost benefit analysis to optimize a threshold for recall and precision. I made a simple Flask prediction app as well.
 
-I summarized the process of modeling and interpreting this data in [this talk](/Predicting patient readmission - JNE.pdf).
+I summarized the process of modeling and interpreting this data in [this talk](Predicting%20patient%20readmission%20-%20JNE.pdf).
 
 
 ## Models compared:
