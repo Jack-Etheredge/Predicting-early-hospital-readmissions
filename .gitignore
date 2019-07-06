@@ -1,0 +1,8 @@
+# Ignore DS_Store in all directories of repo
+**/.DS_Store
+
+# Ignore pickles in root directory of repo
+*.pkl
+
+# Original data csv files
+**/.csv
