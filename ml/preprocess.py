@@ -1,13 +1,27 @@
+"""Extracting the differences between the duplicated notebooks"""
+
+from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+import click
 import pandas as pd
 import patsy as patsy
 import seaborn as sns
 import pickle
 import numpy as np
-from sklearn import preprocessing
-from sklearn.model_selection import train_test_split
 
-def preprocess_data(smote=True,scale=True):
-    df = pd.read_csv('diabetic_data.csv')
+DATA_PATH = '../data/diabetic_data.csv'
+
+
+@click.command()
+@click.option("--remove_expired", default=True, help="Remove expired patients (True or False)?")
+@click.option("--remove_duplicates", default=True, help="Remove duplicate (returned) patients (True or False)?")
+@click.option("--binary_classification", default=True, help="Reduce classes to binary <30 day vs >30 readmission by combining >30 and NO (True or False)?")
+def preprocess(smote=True, scale=True, data_path=DATA_PATH, remove_expired=remove_expired, 
+                remove_duplicates=remove_duplicates, binary_classification=binary_classification):
+    """
+    Preprocess data for use with different classifiers based on eda and feature engineering notebook
+    """
+    df = pd.read_csv(data_path)
 
     df.admission_type_id.replace(
     list(range(1,9)),['Emergency',
@@ -123,9 +137,9 @@ def preprocess_data(smote=True,scale=True):
     'Injury And Poisoning']
 
     codes = zip(numeric_code_ranges, ICD9_diagnosis_groups)
-    codeSet = set(codes)
+    code_set = set(codes)
 
-    for num_range, diagnosis in codeSet:
+    for num_range, diagnosis in code_set:
         #print(num_range)
         oldlist = range(num_range[0],num_range[1]+1)
         oldlist = [str(x) for x in oldlist]
@@ -139,7 +153,7 @@ def preprocess_data(smote=True,scale=True):
         df.loc[df[curr_col].str.contains('E'), curr_col] = 'Supplementary Classification Of External Causes Of Injury And Poisoning'
         df.loc[df[curr_col].str.contains('250'), curr_col] = 'Diabetes mellitus'
 
-    cat_cols = 
+    # cat_cols = ...
 
     df = df.drop(['readmitted','encounter_id','patient_nbr'],axis=1)
 
@@ -194,5 +208,20 @@ def preprocess_data(smote=True,scale=True):
 
     # return X_train, X_test, y_train, y_test
 
-if __name__ == "__main__":
-    preprocess_data()
+    if remove_expired:
+        # Removing expired patients:
+        patientdata = patientdata[patientdata.discharge_disposition_id.str.contains("Expired") == False]
+        print(patientdata.shape)
+
+    if remove_duplicates:
+        # Removing repeat patient entries (since they violate independence):
+        patientdata = patientdata.groupby('patient_nbr', group_keys=False).apply(lambda x: x.loc[x.encounter_id.idxmin()])
+        print(patientdata.shape)
+
+    if binary_classification:
+        y = y.str.replace('>30','NO')
+        y_test = y_test.str.replace('>30','NO')
+        y_train = y_train.str.replace('>30','NO')
+
+if __name__ == '__main__':
+    preprocess()
