@@ -5,3 +5,4 @@ imblearn==0.8.0
 fastai==2.4.1
 matplotlib==3.4.2
 seaborn==0.11.1
+click==8.0.1

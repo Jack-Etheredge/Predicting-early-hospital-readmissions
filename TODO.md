@@ -4,3 +4,4 @@
 - Logging
 - Poetry or pipenv
 - Download the dataset if it's not already present in /data
+- pep8 linting with black/flake8
