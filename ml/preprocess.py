@@ -12,12 +12,8 @@ import numpy as np
 DATA_PATH = '../data/diabetic_data.csv'
 
 
-@click.command()
-@click.option("--remove_expired", default=True, help="Remove expired patients (True or False)?")
-@click.option("--remove_duplicates", default=True, help="Remove duplicate (returned) patients (True or False)?")
-@click.option("--binary_classification", default=True, help="Reduce classes to binary <30 day vs >30 readmission by combining >30 and NO (True or False)?")
-def preprocess(smote=True, scale=True, data_path=DATA_PATH, remove_expired=remove_expired, 
-                remove_duplicates=remove_duplicates, binary_classification=binary_classification):
+def preprocess(smote=True, scale=True, data_path=DATA_PATH, remove_expired=True, 
+                remove_duplicates=True, binary_classification=True):
     """
     Preprocess data for use with different classifiers based on eda and feature engineering notebook
     """
@@ -172,59 +168,39 @@ def preprocess(smote=True, scale=True, data_path=DATA_PATH, remove_expired=remov
             '[80-90)':80, 
             '[90-100)':90}
     df['age_group'] = df.age.replace(age_id)
-    df = df.drop(['age'],axis=1)
-
-    y, x = patsy.dmatrices(f'readmitted ~ {patsy_x_string}', data=df, return_type="dataframe")
-    df2 = df.select_dtypes(include = ['type_of_insterest'])
-    df2 = df.select_dtypes(include = ['type_of_insterest'])
-    df2 = df.select_dtypes(include = ['type_of_insterest'])
-
-    df.select_dtypes(exclude=["number","bool_","object_"])
-
-    print(X.head())
-
-
-    # pd.get_dummies()
-
-    # y = df.readmitted
-
-    # numeric_columns = list(df.select_dtypes("int64").columns)
-    # numeric_columns.remove('encounter_id')
-    # numeric_columns.remove('patient_nbr')
-    # numeric_columns
-
-    # scaler = preprocessing.StandardScaler()
-
-    # x_scaled = x.copy()
-    # x_scaled[numeric_columns] = scaler.fit_transform(x_scaled[numeric_columns])
-
-    # x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25, random_state=42, stratify=y)
-
-    # x_train_scaled = x_train.copy()
-    # x_test_scaled = x_test.copy()
-
-    # # fit_transform on train
-    # x_train_scaled[numeric_columns] = scaler.fit_transform(x_train_scaled[numeric_columns])
-
-    # # transform on test
-    # x_test_scaled[numeric_columns] = scaler.transform(x_test_scaled[numeric_columns])
-
-    # return X_train, X_test, y_train, y_test
+    df = df.drop(['age'], axis=1)
 
     if remove_expired:
         # Removing expired patients:
-        patientdata = patientdata[patientdata.discharge_disposition_id.str.contains("Expired") == False]
-        print(patientdata.shape)
+        df = df[df.discharge_disposition_id.str.contains("Expired") == False]
+        print("df shape after removing expired patients:", df.shape)
 
     if remove_duplicates:
         # Removing repeat patient entries (since they violate independence):
-        patientdata = patientdata.groupby('patient_nbr', group_keys=False).apply(lambda x: x.loc[x.encounter_id.idxmin()])
-        print(patientdata.shape)
+        df = df.groupby('patient_nbr', group_keys=False).apply(lambda x: x.loc[x.encounter_id.idxmin()])
+        print("df shape after removing duplicate patients:", df.shape)
 
+    y = df.readmitted
+    df.drop(['readmitted'], axis=1)
     if binary_classification:
         y = y.str.replace('>30','NO')
-        y_test = y_test.str.replace('>30','NO')
-        y_train = y_train.str.replace('>30','NO')
+    
+    df = pd.get_dummies(df)
+    
+    X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.25, random_state=42, stratify=y)
 
-if __name__ == '__main__':
-    preprocess()
+    numeric_columns = list(df.select_dtypes("int64").columns)
+    numeric_columns.remove('encounter_id')
+    numeric_columns.remove('patient_nbr')
+    print(numeric_columns)
+
+    if scale:
+        scaler = preprocessing.StandardScaler()
+
+        # fit_transform on train
+        X_train[numeric_columns] = scaler.fit_transform(X_train[numeric_columns])
+
+        # transform on test
+        X_test[numeric_columns] = scaler.transform(X_test[numeric_columns])
+
+    return X_train, X_test, y_train, y_test
