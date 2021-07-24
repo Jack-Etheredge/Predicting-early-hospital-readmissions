@@ -21,6 +21,9 @@ def preprocess(smote=True, scale=True, data_path=DATA_PATH, remove_expired=remov
     """
     Preprocess data for use with different classifiers based on eda and feature engineering notebook
     """
+    # TODO: check for existence of data and if it's not found, 
+    # download from https://archive.ics.uci.edu/ml/machine-learning-databases/00296/dataset_diabetes.zip,
+    # extract, and remove zip file
     df = pd.read_csv(data_path)
 
     df.admission_type_id.replace(
