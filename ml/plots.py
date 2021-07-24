@@ -1,3 +1,10 @@
+"""Plotting functions used for EDA and model performance evaluation"""
+
+from sklearn.metrics import confusion_matrix, precision_recall_curve
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+
 
 def boxplot(results, labels, title='boxplot', figsize=(10,10)):
     """
@@ -7,9 +14,10 @@ def boxplot(results, labels, title='boxplot', figsize=(10,10)):
     fig.suptitle('Algorithm Comparison')
     ax = fig.add_subplot(111)
     plt.boxplot(results)
-    ax.set_xticklabels(names)
+    ax.set_xticklabels(labels)
     plt.show()
     return fig
+
 
 def precision_recall_plot(y_test, y_pred_proba, figsize=(10,10)):
     """
@@ -29,6 +37,7 @@ def precision_recall_plot(y_test, y_pred_proba, figsize=(10,10)):
     plt.show()
 
     return fig
+
 
 def plot_confusion_matrix(y_true, y_pred, classes,
                           normalize=False,
