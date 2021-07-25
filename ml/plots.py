@@ -25,8 +25,8 @@ def precision_recall_plot(y_test, y_pred_proba, figsize=(10,10)):
     """
     p, r, t = precision_recall_curve(y_test, y_pred_proba[:, 1])
 
-    # adding last threshold of '1' to threshold list
-    t = np.vstack([t.reshape([-1, 1]), 1])
+    # adding last threshold of 1. to threshold list
+    t = np.concatenate((t, np.array([1.])))
     
     # boxplot algorithm comparison
     fig = plt.figure(figsize=figsize)
@@ -34,6 +34,7 @@ def precision_recall_plot(y_test, y_pred_proba, figsize=(10,10)):
     ax = fig.add_subplot(111)
     plt.plot(t, p, label="precision")
     plt.plot(t, r, label="recall")
+    plt.legend()
     plt.show()
 
     return fig
