@@ -1,0 +1,120 @@
+<!doctype html>
+<html class="uk-light">
+<head>
+    <title>Hospital Readmission Predictor</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lib/uikit.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lib/ion.rangeSlider.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lib/ion.rangeSlider.skinFlat.css') }}" />
+    <script src="{{ url_for('static', filename='js/lib/uikit.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/uikit-icons.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jquery-1.12.3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/ion.rangeSlider.js') }}"></script>
+    <link rel="shortcut icon"
+        href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <style type="text/css">
+/* 
+        @font-face {
+            font-family: 'pokemon_solidnormal';
+            src: url('{{ url_for("static", filename="font/pokemon_solid.woff2") }}') format('woff2'),
+                 url('{{ url_for("static", filename="font/pokemon_solid.woff") }}') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Pokemon-GB';
+            src:  url('{{ url_for("static", filename="font/Pokemon-GB.ttf.woff") }}') format('woff'),
+            url('{{ url_for("static", filename="font/Pokemon-GB.ttf.svg#Pokemon-GB") }}') format('svg'),
+            url('{{ url_for("static", filename="font/Pokemon-GB.ttf.eot") }}'),
+            url('{{ url_for("static", filename="font/Pokemon-GB.eot?#iefix") }}') format('embedded-opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        h1 {
+            font-family: 'pokemon_solidnormal'; letter-spacing: 0.1em;
+            color: #ffcb05 !important;
+        }
+        h1 img {
+            height:1.6em;
+            width: auto;
+        }
+        p, label, select, input, option { font-family: 'Pokemon-GB'; }
+        /*.irs-with-grid:before {margin:1em;}*/
+/* 
+        .irs-with-grid {
+            /*border:1px solid rgba(255, 255, 255, 0.2);*/
+            /*background-color:rgba(255, 255, 255, 0.1);*/
+        }
+ */
+ */
+    </style>
+    <script type="text/javascript">
+        function show_value(x)
+            {
+             document.getElementById("slider_value").innerHTML=x;
+            }
+    </script>
+</head>
+<body class="uk-dark">
+<div class="uk-light uk-background-secondary uk-height-viewport uk-background-cover uk-padding">
+    <h1>Hospital Readmission Predictor</h1>
+    <p>Input patient information and get a prediction for whether they will be readmitted early.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div uk-alert class="uk-animation-scale-down uk-animation-fade">
+                <a class="uk-alert-close" uk-close></a>
+                {% for message in messages %}
+                    <p>{{ message[1] }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form action="" method="post" class="uk-form">
+        {{ form.csrf }}
+
+        <div uk-grid class="uk-grid-divider uk-width-1-1">
+
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.num_lab_procedures.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.num_lab_procedures(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.number_inpatient.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.number_inpatient(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.num_medications.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.num_medications(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.time_in_hospital.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.time_in_hospital(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.number_diagnoses.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.number_diagnoses(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.num_procedures.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.num_procedures(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.number_emergency.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.number_emergency(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.number_outpatient.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.number_outpatient(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.Discharged_to_home.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.Discharged_to_home(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.Dicshared_to_rehab_fac.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.Dicshared_to_rehab_fac(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.gender_Male.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.gender_Male(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.payer_code_MC.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.payer_code_MC(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.diag_1_Circulatory_System.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.diag_1_Circulatory_System(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.diag_2_Circulatory_System.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.diag_2_Circulatory_System(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.diag_3_Circulatory_System.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.diag_3_Circulatory_System(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.age_70_80.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.age_70_80(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.age_60_70.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.age_60_70(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.race_Caucasian.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.race_Caucasian(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.change_med_no.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.change_med_no(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.age_80_90.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.age_80_90(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.medical_specialty_InternalMedicine.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.medical_specialty_InternalMedicine(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.admission_type_id_Emergency.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.admission_type_id_Emergency(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.diag_3_External_Causes.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.diag_3_External_Causes(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.insulin_no.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.insulin_no(class_="uk-select") }}</div></div>
+<div class="uk-margin-top uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">{{ form.insulin_Steady.label(class_="uk-form-label") }} <div class="uk-form-controls">{{ form.insulin_Steady(class_="uk-select") }}</div></div>
+
+        </div>
+
+
+        <div class="input submit uk-margin">
+            <input type="submit" value="Submit" class=" uk-button uk-button-primary uk-margin uk-preserve-color" id="SubmitBtn" />
+        </div>
+    </form>
+
+</div>
+
+<!-- uncommenting this will enable the range sliders but they break flask wtforms, so we'd have to figure out how to destroy the js-built stuff just before we submit or pass whatever might be missing (dunno what it is yet...) -->
+<!-- <script src="{{ url_for('static', filename='js/ion.rangeSlider.custom.js') }}"></script> -->
+
+</body>
+</html>

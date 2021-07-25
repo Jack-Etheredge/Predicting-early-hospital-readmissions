@@ -61,3 +61,8 @@ I inferred directionality of these features through their correlation to the dep
 ## Cost function:
 
 Since I focused on recall in a mostly negative population, my false negative rate was high, meaning that for every early readmission captured, several times more false negatives were predicted. A paper from University of Michigan found there are differences in expenses for different days of the hospital stay. This is a decay with the first day being the most expensive. For more details, see my talk, which also links to the paper. I used these values to make a cost function which found the "break even point", where insurance companies (and/or patients) would not need to pay additional money, but would we would be able to minimize the number of early readmissions through an intervention of one additional day of hospital stay.
+
+
+## Running the Flask app:
+
+`python3 early_readmission_app/app.py` will launch the app locally (in debug mode, unless you turn that setting off).
